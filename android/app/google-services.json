@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "101282996198",
+    "project_id": "pondok-app-23ae1",
+    "storage_bucket": "pondok-app-23ae1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:101282996198:android:556ab4da1deb909a270027",
+        "android_client_info": {
+          "package_name": "com.example.pondok_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "101282996198-ankv3f8o2beoclkf5c1ui6fiqg4mtj8m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdNynIVZJPIDgnird87mh0rSinsVUsbjQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "101282996198-ankv3f8o2beoclkf5c1ui6fiqg4mtj8m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
