@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:pondok_app/page/login_page.dart';
+import 'package:intl/intl.dart';
 // Import provider
 import 'package:pondok_app/provider/auth.dart';
 import "package:pondok_app/provider/siswa.dart";
@@ -17,45 +20,39 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   bool _isSigningOut = false;
-
+  //inisialisasi reference firebase
+  final databaseRef = FirebaseDatabase.instance.ref();
   final TextEditingController namaController = TextEditingController();
   final TextEditingController nisController = TextEditingController();
 
   late User _currentUser;
-
+  late DatabaseReference _dbref;
   @override
   void initState() {
     _currentUser = widget.user;
     super.initState();
+    //inisialisasi _dbref menunjuk ke root/datamurid
+    _dbref = FirebaseDatabase.instance.ref("/datamurid");
+  }
+
+//operasi insert data
+  _createDB(String nis, String nama, String uid) {
+    DateTime createdAt = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(createdAt);
+    _dbref.push().set({
+      'nama': nama,
+      'nis': nis,
+      'idOrtu': uid,
+      'createdAt': formattedDate,
+    });
+    Navigator.pop(context);
+    nisController.clear();
+    namaController.clear();
   }
 
   @override
   Widget build(BuildContext context) {
     // Provider simpan data siswa (ERROR)
-    void save(String nama, String nis) {
-      try {
-        Provider.of<DataSiswa>(context, listen: false)
-            .addSiswa(nama, nis)
-            .then((value) => Navigator.pop(context));
-        //Cek Error
-      } catch (err) {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text("Error Occured"),
-              content: Text("Error : $err"),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text("OKAY"),
-                ),
-              ],
-            );
-          },
-        );
-      }
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -115,7 +112,7 @@ class _ProfilePageState extends State<ProfilePage> {
             builder: (BuildContext context) {
               return AlertDialog(
                 scrollable: true,
-                title: Text('Login'),
+                title: Text('Tambah Murid'),
                 content: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Form(
@@ -156,8 +153,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   Container(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () =>
-                          save(namaController.text, nisController.text),
+                      onPressed: () {
+                        _createDB(nisController.text, namaController.text,
+                            _currentUser.uid);
+                      },
                       child: Text(
                         "Save",
                         style: TextStyle(

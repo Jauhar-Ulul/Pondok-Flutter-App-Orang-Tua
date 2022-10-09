@@ -1,5 +1,6 @@
 import 'dart:convert';
-
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -16,6 +17,7 @@ class DataSiswa with ChangeNotifier {
     notifyListeners();
   }
 
+  final databaseRef = FirebaseDatabase.instance.ref();
   // Link Firestore
   String urlMaster = "https://pondok-app-23ae1-default-rtdb.firebaseio.com/";
   List<Siswa> _allSiswa = [];
@@ -46,7 +48,6 @@ class DataSiswa with ChangeNotifier {
           nis: nis,
           createdAt: dateNow,
         );
-
         _allSiswa.add(data);
         notifyListeners();
       }
